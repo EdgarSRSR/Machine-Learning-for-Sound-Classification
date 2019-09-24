@@ -50,29 +50,32 @@ def plots(ims, figsize = (12,8), rows=1, interp = False, titles=None):
 	plt.show()
 
 imgs, labels = next(train_batches)
-#plots(imgs, titles=labels)
+plots(imgs, titles=labels)
 
-#model = Sequential([
-#	Conv2D(32,(3, 3), activation='relu', input_shape=(224,224,3)),
-#	Flatten(),
-#	Dense(2, activation='softmax'),
-#	])
-#model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
-#steps_per_epoch is calculated by the total amount of samples/ train_batches size
-#model.fit_generator(train_batches, steps_per_epoch=7,
-#	validation_data=valid_batches, validation_steps=7, epochs=5, verbose=2)
+# this is a simple CNN model without pre training, it is not as precise as the one from Keras below, comment this section out if you don't
+# want to use it, since it is there only for learning purposes
+model = Sequential([
+	Conv2D(32,(3, 3), activation='relu', input_shape=(224,224,3)),
+	Flatten(),
+	Dense(2, activation='softmax'),
+	])
+model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
+steps_per_epoch is calculated by the total amount of samples/ train_batches size
+model.fit_generator(train_batches, steps_per_epoch=7,
+	validation_data=valid_batches, validation_steps=7, epochs=5, verbose=2)
+#tests usng the model
+test_imgs, test_labels = next(test_batches)
+plots(test_imgs, titles=test_labels)
 
-#test_imgs, test_labels = next(test_batches)
-#plots(test_imgs, titles=test_labels)
+test_labels = test_labels[:,0]
+print(test_labels)
+# creates predictions using the model
+predictions = model.predict_generator(test_batches, steps=1, verbose=0)
+print(predictions)
+#creates a confusion matrix for the model
+cm = confusion_matrix(test_labels, predictions[:,0])
 
-#test_labels = test_labels[:,0]
-#print(test_labels)
-
-#predictions = model.predict_generator(test_batches, steps=1, verbose=0)
-#print(predictions)
-
-#cm = confusion_matrix(test_labels, predictions[:,0])
-
+# a function that creates a confusion matrix
 def plot_confusion_matrix(cm, classes, normalize=False,
 						title= 'Confusion matrix', 
 						cmap = plt.cm.Blues):
@@ -105,6 +108,8 @@ def plot_confusion_matrix(cm, classes, normalize=False,
 #cm_plot_labels = ['drones','notdrones']
 #plot_confusion_matrix(cm, cm_plot_labels, title='Confusion Matrix')
 
+
+# this is another CNN model that is more powerful than the one above, it is pre trained and come from a Kerala library
 vgg16_model = keras.applications.vgg16.VGG16()
 vgg16_model.summary()
 type(vgg16_model)
@@ -121,6 +126,7 @@ model.summary()
 model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 model.fit_generator(train_batches, steps_per_epoch=5, validation_data = valid_batches, validation_steps = 5, epochs = 6, verbose = 2)
 
+#tests for the model
 test_imgs, test_labels = next(test_batches)
 plots(test_imgs, titles=test_labels)
 
@@ -130,13 +136,13 @@ print(test_labels)
 predictions = model.predict_generator(test_batches, steps=1, verbose=0)
 cm_plot_labels = ['drones','notdrones']
 
-#y_pred = model.predict(test, batch_size=64, verbose=1)
-
 y_pred_bool = np.argmax(predictions, axis=1)
 
+#prints report
 print(classification_report(y_pred_bool, test_labels ))
 
+#creates confusion matrix
 cm = confusion_matrix(test_labels, np.round(predictions[:,0]))
 
-
+#plots confusion matrix
 plot_confusion_matrix(cm, cm_plot_labels, title='Confusion Matrix')
