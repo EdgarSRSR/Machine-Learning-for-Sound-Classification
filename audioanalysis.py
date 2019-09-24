@@ -1,3 +1,10 @@
+# the objective of this file is to experiment with multiple parameters and characteristics
+# for the analysis of audio files. It does different analysis like calculating spectral centroid,
+# fast fourier transforms or Mffcs. It also plot different types of spectograms.
+# The analysis is done thanks to libraries like librosa who are created for manipulation of audio
+# The idea of this file is to get different parameters and commenting out whatever functions that
+# arre not needed.
+
 import os
 from matplotlib import pyplot as plt 
 import numpy as np
@@ -8,7 +15,7 @@ import librosa.display
 import glob
 import csv 
 
-inp = "lawn-mower-idle.wav"
+inp = "nameofaudiofile.wav"
 #audio is decoded as a time series where y is one dimensional numpY point array
 # and sr is the sampling rate of y
 y, sr = librosa.load(inp)
@@ -23,7 +30,7 @@ y_harmonic, y_percussive = librosa.effects.hpss(y)
 tempo, beat_frames = librosa.beat.beat_track(y=y_percussive,
                                              sr=sr)
 
-# Compute MFCC features from the raw signal
+# Compute MFCC features from the raw signal, it calculates 13 mfcc in one file
 mfcc = librosa.feature.mfcc(y=y, sr=sr, hop_length=hop_length, n_mfcc=13)
 mfccs = np.mean(librosa.feature.mfcc(y=y, sr=sr, hop_length=hop_length, n_mfcc=13).T,axis=0) 
 # And the first-order differences (delta features)
