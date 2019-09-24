@@ -16,7 +16,7 @@ from sklearn.model_selection import KFold
 from sklearn.utils import shuffle
 from scipy.sparse import coo_matrix
 
-
+#reads the data placed in the csv file, by audiodataextraction.py
 data = pd.read_csv("results.csv")
 shape = data.shape
 print(shape)
