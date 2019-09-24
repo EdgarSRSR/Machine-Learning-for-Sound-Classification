@@ -65,6 +65,7 @@ print(classification_report(y_test,y_pred))
 #plt.plot(x_train,y_train, linestyle=':')
 #plt.show()
 
+# creates confusion matrix
 def plot_confusion_matrix(cm, classes, normalize=False,
 						title= 'Confusion matrix', 
 						cmap = plt.cm.Blues):
