@@ -14,20 +14,22 @@ import csv
 
 # Set the hop length; at 22050 Hz, 512 samples ~= 23ms
 hop_length = 512
-label = "0"
-files_path = '/Users/edgarsr/Desktop/ТГУ/thesis/sounds/drones'
-#print(os.listdir(files_path))
+#I directed the program to a depository that contained only samples of a certain sound origin (e.g. drones) and that way I used label '1'
+# and '0' for the other directory with the other sounds. That way I created a model that distinguishes between two typed of sound.
+label = "0" 
+files_path = 'file/path/to/audio/directories'
+print(os.listdir(files_path))
 #create mfccs, number of mfccs calculated is 13 for each file
-#for filename in os.listdir(files_path):
+for filename in os.listdir(files_path):
     
-#    if filename.endswith(".mp3") or filename.endswith(".wav"):
+    if filename.endswith(".mp3") or filename.endswith(".wav"):
         #load data
-#        y, sr = librosa.load(filename)
-#        mfccs = np.mean(librosa.feature.mfcc(y=y, sr=sr, hop_length=hop_length, n_mfcc=13).T,axis=0) 
-#        feature = mfccs
-#        with open('results.csv', mode = 'a') as results_file:
-#        	results_writer = csv.writer(results_file, delimiter=',', quotechar='"')
-#        	results_writer.writerows([feature,label])
+        y, sr = librosa.load(filename)
+        mfccs = np.mean(librosa.feature.mfcc(y=y, sr=sr, hop_length=hop_length, n_mfcc=13).T,axis=0) 
+        feature = mfccs
+        with open('results.csv', mode = 'a') as results_file:
+        	results_writer = csv.writer(results_file, delimiter=',', quotechar='"')
+        	results_writer.writerows([feature,label])
 
 
 #create spectrograms
@@ -43,19 +45,4 @@ for filename in os.listdir(files_path):
     	#plt.title('Linear-frequency power spectrogram')
     	specplotimg = inp + 'specplot' + '.jpg'
     	plt.savefig(specplotimg, box_inches=None, pad_inches=0)    
-#y, sr = librosa.load("dronetest1.mp3")
-#hop_length = 512
-#mfccs = np.mean(librosa.feature.mfcc(y=y, sr=sr, hop_length=hop_length, n_mfcc=13).T,axis=0) 
-#zerocross = librosa.feature.zero_crossing_rate(y)
-#feature = mfccs
-#label = "1"
 
-#with open('results.csv', mode = 'a') as results_file:
-#	results_writer = csv.writer(results_file, delimiter=',', quotechar='"')
-#	results_writer.writerow(['mfccs','label'])
-#	results_writer.writerows([feature,label])
-
-#with open('results.csv', mode = 'a') as results_file:
-#	results_writer = csv.writer(results_file, delimiter=',', quotechar='"')
-#	results_writer.writerow(['mfccs','label'])
-#	results_writer.writerows([feature,label])
